@@ -3,12 +3,14 @@ package com.duong.productmanager.controller;
 import com.duong.productmanager.entity.AppRole;
 import com.duong.productmanager.entity.AppUser;
 import com.duong.productmanager.entity.ERole;
+import com.duong.productmanager.entity.ProfileUser;
 import com.duong.productmanager.entity.dto.UserPrincipal;
 import com.duong.productmanager.payload.request.LoginRequest;
 import com.duong.productmanager.payload.request.SignupRequest;
 import com.duong.productmanager.payload.response.JwtResponse;
 import com.duong.productmanager.payload.response.MessageResponse;
 import com.duong.productmanager.service.jwt.JwtService;
+import com.duong.productmanager.service.profileusers.IProfileUsersService;
 import com.duong.productmanager.service.role.IRoleService;
 import com.duong.productmanager.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,8 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private IProfileUsersService profileUsersService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser (@Valid @RequestBody SignupRequest signupRequest) {
@@ -70,6 +74,8 @@ public class AuthController {
         user.setRoles(roleSet);
         userService.save(user);
 
+        ProfileUser profileUser = new ProfileUser(user);
+        profileUsersService.save(profileUser);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
