@@ -32,7 +32,7 @@ public class ProfileUsersService implements IProfileUsersService{
     }
 
     @Override
-    public ProfileUser findByAppUser_Username(String username) {
+    public Optional<ProfileUser> findByAppUser_Username(String username) {
         return profileUserRepository.findByAppUser_Username(username);
     }
 }
